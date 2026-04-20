@@ -1,5 +1,10 @@
-export default function Home() {
+export default async function Home() {
+  console.log("ENV TEST:", process.env.NEXT_PUBLIC_API_URL);
+  console.log("FOO:", process.env.FOO);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"></div>
+    <div>
+      <h1>Home Page Working!</h1>
+    </div>
   );
 }
