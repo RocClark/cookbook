@@ -1,10 +1,10 @@
-export default async function Home() {
-  console.log("ENV TEST:", process.env.NEXT_PUBLIC_API_URL);
-  console.log("FOO:", process.env.FOO);
-
+export default function Home() {
   return (
     <div>
-      <h1>Home Page Working!</h1>
+      <h1 className="text-3xl font-bold">Welcome to the Cookbook</h1>
+      <p className="mt-4 text-gray-700">
+        Browse recipes or check seasonal tips.
+      </p>
     </div>
   );
 }
