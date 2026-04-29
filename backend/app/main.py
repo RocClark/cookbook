@@ -1,24 +1,34 @@
-# backend/app/main.py
-
 from fastapi import FastAPI
+from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import recipes, tips
+
 
 app = FastAPI(title="Cookbook API", version="1.0")
 
-# ✅ Enable CORS so Next.js can talk to FastAPI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],  # You can restrict this later
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Register routes
-app.include_router(recipes.router)
-app.include_router(tips.router)
+class Recipe(BaseModel):
+    title: str
+    ingredients: list[str]
+    tools: list[str]
+    prep: list[str]
+    cook: list[str]
 
 @app.get("/")
 def root():
-    return {"message": "Cookbook API is running"}
+    return {"message": "Welcome to the Cookbook API!"}
+
+@app.get("/recipes")
+def get_recipes():
+    return {"recipes": ["Spaghetti", "Tacos"]}
+
+@app.post("/recipes")
+def create_recipe(recipe: Recipe):
+    print("Received Recipe:", recipe.dict())   # 🔥 CONFIRM FRONTEND CONNECTION
+    return {"status": "ok", "received": recipe}
