@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-from app.models.recipe import Recipe
+from app.models.recipe import Recipe, RecipeCreate
 from app.db.json_handler import load_data, save_data, RECIPES_FILE
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
@@ -22,16 +22,20 @@ def get_recipe(recipe_id: int):
     return recipe
 
 @router.post("/")
-def create_recipe(recipe: Recipe):
+def create_recipe(recipe_data: RecipeCreate):
     recipes = load_data(RECIPES_FILE)
 
-    recipe.id = len(recipes) + 1
-    recipe.created_at = recipe.updated_at = datetime.now()
+    new_recipe = Recipe(
+        id=len(recipes) + 1,
+        created_at=datetime.now(),
+        updated_at=datetime.now(),
+        **recipe_data.dict()
+    )
 
-    recipes.append(recipe.dict())
+    recipes.append(new_recipe.dict())
     save_data(RECIPES_FILE, recipes)
 
-    return recipe
+    return new_recipe
 
 @router.put("/{recipe_id}")
 def update_recipe(recipe_id: int, updated_recipe: Recipe):

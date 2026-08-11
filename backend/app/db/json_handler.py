@@ -1,20 +1,22 @@
 # backend/app/db/json_handler.py
-
 import json
-from pathlib import Path
+import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "data"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app/db
+DATA_DIR = os.path.join(BASE_DIR, "../data")            # backend/app/data
+DATA_DIR = os.path.abspath(DATA_DIR)
 
-RECIPES_FILE = DATA_DIR / "recipes.json"
-TIPS_FILE = DATA_DIR / "tips.json"
+RECIPES_FILE = os.path.join(DATA_DIR, "recipes.json")
+
 
 def load_data(file_path):
-    if not file_path.exists():
+    if not os.path.exists(file_path):
         return []
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, "r") as f:
         return json.load(f)
 
+
 def save_data(file_path, data):
-    with open(file_path, "w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "w") as f:
         json.dump(data, f, indent=4, default=str)
