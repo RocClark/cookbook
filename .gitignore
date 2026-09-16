@@ -1,3 +1,11 @@
 node_modules
 .vscode
-venv
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
